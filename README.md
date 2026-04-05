@@ -1,6 +1,6 @@
 # FinEdge Engine Group 10
 
-A Node.js application for financial edge processing.
+FinEdge personal finance tracker using Node.js and Express.
 
 ## Description
 
