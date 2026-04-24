@@ -61,4 +61,4 @@ ehthumbs.db
 Thumbs.db
 
 # Ignore all env files
-**/.env**
+**/.env.**
