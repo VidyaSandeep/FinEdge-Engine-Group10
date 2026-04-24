@@ -1,36 +1,42 @@
-require('dotenv').config();
-const express = require('express');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+
+import { notFoundHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { requestLogHandler } from './middleware/requestLogHandler.js';
+import { apiRateLimiter } from './middleware/rateLimiter.js';
+
+import healthRoutes from './routes/healthRoutes.js';
+
 const app = express();
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = process.env.MONGODB_URI;
-const PORT = process.env.PORT;
-const mongoose = require('mongoose');
+//blocks others from seeing our express version
+app.disable('x-powered-by');
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 
-const healthRoute = require('./routes/healthRoute');
-const userRoutes = require('./routes/userRoutes');
-const transactionRoutes = require('./routes/transactionRoutes');
+app.use(cors({
+    origin: '*',
+    credentials: true,
+}));
 
-app.use('/', healthRoute);
-app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/transactions', transactionRoutes);
+app.use(express.json({ limit: '16kb' }));
+app.use(express.urlencoded({
+    extended: false,
+    limit: '16kb',
+    parameterLimit: 100,
+}));
 
-mongoose.connect(uri)
-    .then(() => {
-        console.log("Connected to MongoDB")
-    }).then(() => {
-        app.listen(PORT, () => {
-            console.log("Express server up and running on port: ", PORT);
-        })
-    }).catch((err) => {
-        console.log(err);
-        process.exit(1)
-    })
+app.use(requestLogHandler);
 
-app.get('/', (req, res) => {
-    console.log(req.query); 
-    res.send('Hello World!');
-})
+// API routes rate limiting (100 requests per 15 minutes per IP)
+app.use('/api/', apiRateLimiter);
+
+// API Routes
+app.use('/api/v1/health', healthRoutes);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
+
+export default app;

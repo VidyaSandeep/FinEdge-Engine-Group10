@@ -16,14 +16,21 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: 6
+    minlength: 6,
+    select: false
   },
   preferences: {
-    currency: {
-      type: String,
-      default: 'INR'
-    }
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserPreference',
+    default: null,
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
   }
+}, {
+  timestamps: true,
+  versionKey: false
 });
-
+userSchema.index({ email: 1 }, { unique: true });
 module.exports = mongoose.model('User', userSchema);

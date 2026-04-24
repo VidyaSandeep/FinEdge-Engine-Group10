@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
-  user: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
@@ -14,7 +14,8 @@ const transactionSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    maxlength: 100
   },
   amount: {
     type: Number,
@@ -27,14 +28,18 @@ const transactionSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    trim: true
+    trim: true,
+    maxlength: 500,
+    default: '',
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  versionKey: false
 });
 
 // Index for better query performance
-transactionSchema.index({ user: 1, date: -1 });
-transactionSchema.index({ user: 1, type: 1 });
+transactionSchema.index({ userId: 1, date: -1 });
+transactionSchema.index({ userId: 1, category: 1, date: -1 });
+transactionSchema.index({ userId: 1, type: 1, date: -1 });
 
 module.exports = mongoose.model('Transaction', transactionSchema);

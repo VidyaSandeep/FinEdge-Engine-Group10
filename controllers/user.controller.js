@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
+//TODO: Use user.service.js instead of user.model.js for logic
+
 // Register new user
 const registerUser = async (req, res) => {
   try {
