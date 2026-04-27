@@ -33,4 +33,12 @@ export const ERROR_DEFINITIONS = {
     statusCode: 503,
     message: 'Service is unhealthy',
   },
+  [ERROR_CODES.INVALID_INPUT]: {
+    statusCode: 400,
+    message: 'Invalid input',
+  },
+  [ERROR_CODES.DUPLICATE_ENTRY]: {
+    statusCode: 409,
+    message: 'Duplicate entry',
+  }
 };

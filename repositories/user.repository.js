@@ -1,17 +1,17 @@
 import User from '../models/user.model.js';
 
 
-export async function create(payload) {
+export async function createUser(payload) {
     const user = await User.create(payload);
     return toDomain(user);
 }
 
-export async function findById(userId) {
+export async function findUserById(userId) {
     const user = await User.findById(userId).lean();
     return user ? toDomain(user) : null;
 }
 
-export async function findByEmail(email) {
+export async function findUserByEmail(email) {
     const user = await User.findOne({
         email: email.trim().toLowerCase(),
     }).lean();
@@ -19,17 +19,17 @@ export async function findByEmail(email) {
     return user ? toDomain(user) : null;
 }
 
-export async function findByEmailWithPassword(email) {
+export async function findUserByEmailWithPassword(email) {
     const user = await User.findOne({
         email: email.trim().toLowerCase(),
     })
-        .select('+passwordHash')
+        .select('+password')
         .lean();
 
     return user ? toDomain(user) : null;
 }
 
-export async function softDeleteById(userId) {
+export async function softDeleteUserById(userId) {
     const user = await User.findByIdAndUpdate(
         userId,
         { isActive: false },
@@ -39,12 +39,12 @@ export async function softDeleteById(userId) {
     return user ? toDomain(user) : null;
 }
 
-export async function deleteById(userId) {
+export async function deleteUserById(userId) {
     const user = await User.findByIdAndDelete(userId).lean();
     return user ? toDomain(user) : null;
 }
 
-export async function existsByEmail(email) {
+export async function userExistsByEmail(email) {
     const count = await User.countDocuments({
         email: email.trim().toLowerCase(),
     });
@@ -59,7 +59,7 @@ function toDomain(doc) {
         id: String(doc._id),
         name: doc.name,
         email: doc.email,
-        passwordHash: doc.passwordHash,
+        passwordHash: doc.password,
         isActive: doc.isActive,
         createdAt: doc.createdAt,
         updatedAt: doc.updatedAt,

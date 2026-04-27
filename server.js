@@ -1,7 +1,8 @@
 import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
-import { connectDb } from './datasource/db.js';
+import { connectDb } from './datasource/mongo.datasource.js';
 import app from './app.js';
+
 
 async function startServer() {
     try {

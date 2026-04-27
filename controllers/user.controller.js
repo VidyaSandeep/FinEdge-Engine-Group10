@@ -1,51 +1,44 @@
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
+import { registerUser, loginUser, userProfile } from '../services/user.service.js';
+import { sendSuccess } from '../utils/response.js';
 
-//TODO: Use user.service.js instead of user.model.js for logic
-
-// Register new user
-const registerUser = async (req, res) => {
+export async function register(req, res, next) {
   try {
-    const { name, email, password, preferences } = req.body;
+    const result = await registerUser(req.body);
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists with this email' });
-    }
-
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create user
-    const user = new User({
-      name,
-      email,
-      password: hashedPassword,
-      preferences: preferences || {}
-    });
-
-    await user.save();
-
-    // Return user without password
-    const userResponse = {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      preferences: user.preferences
-    };
-
-    res.status(201).json({
+    return sendSuccess(res, {
+      statusCode: 201,
       message: 'User registered successfully',
-      user: userResponse
+      data: result,
     });
   } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    next(error);
   }
-};
+}
 
-module.exports = {
-  registerUser
-};
+export async function login(req, res, next) {
+  try {
+    const result = await loginUser(req.body);
+
+    return sendSuccess(res, {
+      statusCode: 200,
+      message: 'User logged in successfully',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function profile(req, res, next) {
+  try {
+    const result = await userProfile(req.user.id);
+
+    return sendSuccess(res, {
+      statusCode: 200,
+      message: 'User profile fetched successfully',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+}

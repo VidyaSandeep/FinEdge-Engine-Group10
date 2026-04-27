@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 
-const { Schema, model } = mongoose;
-
-const budgetSchema = new Schema(
+const budgetSchema = new mongoose.Schema(
     {
         userId: {
             type: Schema.Types.ObjectId,
@@ -39,4 +37,5 @@ const budgetSchema = new Schema(
 
 budgetSchema.index({ userId: 1, year: 1, month: 1 }, { unique: true });
 
-export const BudgetModel = model('Budget', budgetSchema);
+const BudgetModel = mongoose.model('Budget', budgetSchema);
+export default BudgetModel;

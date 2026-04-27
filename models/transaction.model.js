@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const transactionSchema = new mongoose.Schema({
   userId: {
@@ -37,9 +37,9 @@ const transactionSchema = new mongoose.Schema({
   versionKey: false
 });
 
-// Index for better query performance
 transactionSchema.index({ userId: 1, date: -1 });
 transactionSchema.index({ userId: 1, category: 1, date: -1 });
 transactionSchema.index({ userId: 1, type: 1, date: -1 });
 
-module.exports = mongoose.model('Transaction', transactionSchema);
+const TransactionModel = mongoose.model('Transaction', transactionSchema);
+export default TransactionModel;

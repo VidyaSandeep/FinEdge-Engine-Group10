@@ -1,13 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-
-import { notFoundHandler } from './middleware/notFoundHandler.js';
-import { errorHandler } from './middleware/errorHandler.js';
-import { requestLogHandler } from './middleware/requestLogHandler.js';
-import { apiRateLimiter } from './middleware/rateLimiter.js';
-
-import healthRoutes from './routes/healthRoutes.js';
+import healthRoutes from './routes/health.route.js';
+import userRoutes from './routes/user.routes.js';
+import {notFoundHandler} from './middleware/notFound.middleware.js';
+import {errorHandler} from './middleware/error.middleware.js';
+import {requestLogHandler} from './middleware/requestLog.middleware.js';
+import {apiRateLimiter} from './middleware/rateLimiter.middleware.js';
 
 const app = express();
 
@@ -30,11 +29,18 @@ app.use(express.urlencoded({
 
 app.use(requestLogHandler);
 
-// API routes rate limiting (100 requests per 15 minutes per IP)
+app.get('/', (req, res) => {
+    return res.status(200).json({
+        message: "Welcome to the FinEdge API",
+        version: "1.0.0",
+    });
+});
+
+
 app.use('/api/', apiRateLimiter);
 
-// API Routes
-app.use('/api/v1/health', healthRoutes);
+app.use('/api/health', healthRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
