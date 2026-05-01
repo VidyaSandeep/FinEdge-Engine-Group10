@@ -3,10 +3,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import healthRoutes from './routes/health.route.js';
 import userRoutes from './routes/user.routes.js';
-import {notFoundHandler} from './middleware/notFound.middleware.js';
-import {errorHandler} from './middleware/error.middleware.js';
-import {requestLogHandler} from './middleware/requestLog.middleware.js';
-import {apiRateLimiter} from './middleware/rateLimiter.middleware.js';
+import { notFoundHandler } from './middleware/notFound.middleware.js';
+import { errorHandler } from './middleware/error.middleware.js';
+import { requestLogHandler } from './middleware/requestLog.middleware.js';
+import { apiRateLimiter } from './middleware/rateLimiter.middleware.js';
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.disable('x-powered-by');
 app.use(helmet());
 
 app.use(cors({
-    origin: '*',
+    origin: true,
     credentials: true,
 }));
 

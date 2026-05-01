@@ -10,7 +10,7 @@ export function authMiddleware(req, res, next) {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new ApiError(
         ERROR_CODES.UNAUTHORIZED,
-        'Authorization token is required'
+        { message: 'Authorization token is required' }
       );
     }
 
@@ -31,7 +31,7 @@ export function authMiddleware(req, res, next) {
         ? error
         : new ApiError(
             ERROR_CODES.UNAUTHORIZED,
-            'Invalid or expired token'
+            { message: 'Invalid or expired token' }
           )
     );
   }

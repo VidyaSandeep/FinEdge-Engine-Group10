@@ -1,3 +1,4 @@
+import { is } from 'zod/locales';
 import User from '../models/user.model.js';
 
 
@@ -6,26 +7,30 @@ export async function createUser(payload) {
     return toDomain(user);
 }
 
-export async function findUserById(userId) {
+export async function findUserById(userId, isActive) {
     const user = await User.findById(userId).lean();
+    if (user && isActive !== undefined &&
+        user.isActive === isActive) {
+        return null;
+    }
     return user ? toDomain(user) : null;
 }
 
-export async function findUserByEmail(email) {
-    const user = await User.findOne({
-        email: email.trim().toLowerCase(),
-    }).lean();
-
+export async function findUserByEmail(email, isActive) {
+    const query = { email: email.trim().toLowerCase() };
+    if (isActive !== undefined) {
+        query.isActive = isActive;
+    }
+    const user = await User.findOne(query).lean();
     return user ? toDomain(user) : null;
 }
 
-export async function findUserByEmailWithPassword(email) {
-    const user = await User.findOne({
-        email: email.trim().toLowerCase(),
-    })
-        .select('+password')
-        .lean();
-
+export async function findUserByEmailWithPassword(email, isActive) {
+    const query = { email: email.trim().toLowerCase() };
+    if (isActive !== undefined) {
+        query.isActive = isActive;
+    }
+    const user = await User.findOne(query).select('+password').lean();
     return user ? toDomain(user) : null;
 }
 
@@ -48,7 +53,6 @@ export async function userExistsByEmail(email) {
     const count = await User.countDocuments({
         email: email.trim().toLowerCase(),
     });
-
     return count > 0;
 }
 

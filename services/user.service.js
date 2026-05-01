@@ -9,15 +9,15 @@ import { env } from '../config/env.js';
 export async function loginUser(payload) {
   const { email, password } = payload;
   if (!email || !password) {
-    throw new ApiError(ERROR_CODES.INVALID_CREDENTIALS, "Invalid credentials");
+    throw new ApiError(ERROR_CODES.INVALID_CREDENTIALS, { message: "Invalid credentials" });
   }
   const user = await findUserByEmailWithPassword(email);
   if (!user) {
-    throw new ApiError(ERROR_CODES.INVALID_CREDENTIALS, "Invalid credentials");
+    throw new ApiError(ERROR_CODES.INVALID_CREDENTIALS, { message: "Invalid credentials" });
   }
   const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
   if (!isPasswordValid) {
-    throw new ApiError(ERROR_CODES.INVALID_CREDENTIALS, "Invalid credentials");
+    throw new ApiError(ERROR_CODES.INVALID_CREDENTIALS, { message: "Invalid credentials" });
   }
 
   const token = jwt.sign({ id: user.id, name: user.name, email: user.email },
@@ -40,12 +40,12 @@ export async function registerUser(payload) {
     const { name, email, password } = payload;
 
     if (!name || !email || !password) {
-      throw new ApiError(ERROR_CODES.INVALID_INPUT, "All fields are required");
+      throw new ApiError(ERROR_CODES.INVALID_INPUT, { message: "All fields are required" });
     }
 
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
-      throw new ApiError(ERROR_CODES.DUPLICATE_ENTRY, "Email already registered");
+      throw new ApiError(ERROR_CODES.DUPLICATE_ENTRY, { message: "Email already registered" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -71,14 +71,14 @@ export async function registerUser(payload) {
     };
 
   } catch (error) {
-    logger.error("Registration error:", error);
+    logger.error({ err: error }, "Registration error");
     if (error.name === "ValidationError") {
-      throw new ApiError(ERROR_CODES.INVALID_INPUT, "Validation failed");
+      throw new ApiError(ERROR_CODES.INVALID_INPUT, { message: "Validation failed" });
     }
     if (error instanceof ApiError) {
       throw error;
     }
-    throw new ApiError(ERROR_CODES.INTERNAL_SERVER_ERROR, "Internal server error");
+    throw new ApiError(ERROR_CODES.INTERNAL_SERVER_ERROR, { message: "Internal server error" });
   }
 }
 
@@ -86,14 +86,14 @@ export async function userProfile(userId) {
   try {
     const user = await findUserById(userId);
     if (!user) {
-      throw new ApiError(ERROR_CODES.USER_NOT_FOUND, "User not found");
+      throw new ApiError(ERROR_CODES.USER_NOT_FOUND, { message: "User not found" });
     }
     return user;
   } catch (error) {
-    logger.error("User profile error:", error);
+    logger.error({ err: error }, "User profile error");
     if (error instanceof ApiError) {
       throw error;
     }
-    throw new ApiError(ERROR_CODES.INTERNAL_SERVER_ERROR, "Internal server error");
+    throw new ApiError(ERROR_CODES.INTERNAL_SERVER_ERROR, { message: "Internal server error" });
   }
 }

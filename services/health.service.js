@@ -1,5 +1,6 @@
 import { ERROR_CODES } from '../constants/errorCodes.js';
 import { pingDb } from '../datasource/mongo.datasource.js';
+import { ApiError } from '../utils/ApiError.js';
 
 export const healthService = {
     async check() {

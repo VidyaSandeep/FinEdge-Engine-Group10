@@ -40,5 +40,9 @@ export const ERROR_DEFINITIONS = {
   [ERROR_CODES.DUPLICATE_ENTRY]: {
     statusCode: 409,
     message: 'Duplicate entry',
+  },
+  [ERROR_CODES.NOT_FOUND]: {
+    statusCode: 404,
+    message: 'Resource not found',
   }
 };
