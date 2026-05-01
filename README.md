@@ -1,6 +1,6 @@
 # FinEdge Engine Group 10
 
-FinEdge personal finance tracker using Node.js and Express.
+FinEdge personal finance tracker using Node.js, Express and MongoDB.
 
 ## Description
 
