@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinEdge API | Modern Finance Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg: #ffffff;
+            --card-bg: #f8fafc;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --accent: #10b981;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Left Pane: Features */
+        .features-pane {
+            flex: 0 0 400px;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .card h3 {
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Right Pane: Hero */
+        .hero-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem;
+            position: relative;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin-bottom: 3rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: var(--card-bg);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                overflow-y: auto;
+                height: auto;
+            }
+
+            .features-pane {
+                flex: none;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Left Side: Features -->
+    <div class="features-pane">
+        <div class="card">
+            <h3>Observability</h3>
+            <p>Advanced request tracking with AsyncLocalStorage and child-correlated logging.</p>
+        </div>
+        <div class="card">
+            <h3>Smart Analysis</h3>
+            <p>Rule-based auto-categorization and dynamic saving tips driven by spending habits.</p>
+        </div>
+        <div class="card">
+            <h3>Event-Driven</h3>
+            <p>Fully decoupled architecture using a centralized EventBus for real-time alerts.</p>
+        </div>
+        <div class="card">
+            <h3>High Performance</h3>
+            <p>In-memory TTL caching for heavy analytical queries and summary re-computations.</p>
+        </div>
+    </div>
+
+    <!-- Right Side: Hero -->
+    <div class="hero-pane">
+        <div class="status-badge">
+            <div class="dot"></div>
+            Engine v1.0.0 Online
+        </div>
+        <h1>FinEdge API</h1>
+        <p class="tagline">A high-performance finance engine with real-time categorization and automated budget
+            intelligence.</p>
+        <div class="btn-group">
+            <a href="/api/docs" class="btn btn-primary">Explorer Docs</a>
+            <a href="/api/health" class="btn btn-outline">System Status</a>
+        </div>
+        <footer>
+            &copy; 2026 FinEdge Engine. Built with Node.js, Express, and MongoDB.
+        </footer>
+    </div>
+
+</body>
+
+</html>
